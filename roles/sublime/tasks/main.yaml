@@ -39,3 +39,8 @@
   template:
     src: Package Control.sublime-settings.j2
     dest: "{{ sublime_package_control_package_path }}/Package Control.sublime-settings"
+
+- name: setup Terminal package
+  template:
+    src: Terminal.sublime-settings.j2
+    dest: "{{ sublime_package_control_package_path }}/Terminal.sublime-settings"

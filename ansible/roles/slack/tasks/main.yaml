@@ -1,0 +1,48 @@
+# tasks file for slack
+---
+- name: Install python-apt for Debian systems
+  package: 
+    name: python-apt
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Get package facts
+  package_facts:
+
+- name: Debug 
+  debug:
+    var: packages['slack-desktop'][0]['version']
+
+- name: download and install slack
+  block:
+    - name: install | create (download) directory
+      file:
+        path: "{{ slack_downloads_path }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      become: true
+
+    - name: install | download deb
+      get_url:
+        url: "https://downloads.slack-edge.com/linux_releases/slack-desktop-{{ slack_version }}-{{ slack_machine_map[ansible_machine] }}.deb"
+        dest: "{{ slack_downloads_path }}/slack-desktop-{{ slack_version }}-{{ slack_machine_map[ansible_machine] }}.deb"
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+    - name: install | install deb
+      apt:
+        update_cache: true
+        cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+        deb: "{{ slack_downloads_path }}/slack-desktop-{{ slack_version }}-{{ slack_machine_map[ansible_machine] }}.deb"
+      become: true
+
+    - name: clean up downloads
+      file:
+        path: "{{ slack_downloads_path }}"
+        state: absent
+      become: true
+  when: "'slack-desktop' not in packages or packages['slack-desktop'][0]['version'] != slack_version"

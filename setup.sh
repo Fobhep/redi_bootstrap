@@ -7,4 +7,4 @@ if (( $EUID != 0 )); then
 fi
 
 apt install ansible -y
-ansible-playbook bootstrap.yaml
+ansible-playbook bootstrap.yaml -v

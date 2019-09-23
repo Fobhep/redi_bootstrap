@@ -1,0 +1,12 @@
+---
+- name: Update System
+  package:
+    name: '*'
+    state: latest
+  become: true
+
+- name: Install packages
+  package:
+    name: "{{ packages }}"
+    state: present
+  become: true

@@ -1,0 +1,41 @@
+---
+# tasks file for sublime-text
+
+- name: import os specific vars
+  include_vars: "{{ ansible_os_family }}.yaml"
+
+- name: import os specific tasks
+  include_tasks: "{{ ansible_os_family }}.yaml"
+
+# Install Package Control
+
+- name: check sublime Installed Package directory
+  stat:
+    path: "{{ sublime_installed_packages_dir }}"
+  register: check_sublime_installed_packages_dir
+  when: sublime_package_control
+
+- name: create Installed Package directory
+  file:
+    path: "{{ sublime_installed_packages_dir }}"
+    state: directory
+  when: sublime_package_control and check_sublime_installed_packages_dir.stat.exists == False
+
+- name: Install package control for sublime
+  get_url: 
+    url: "{{ sublime_package_control_url }}/Package%20Control.sublime-package"
+    dest: "{{ sublime_installed_packages_dir }}/Package Control.sublime-package"
+  when: sublime_package_control
+
+# Install & Configure Sublime Text Packages
+
+- name: check sublime Package directory
+  stat:
+    path: "{{ sublime_packages_dir }}"
+  register: check_sublime_packages_dir
+  when: sublime_package_control
+
+- name: render package control settings and install packages
+  template:
+    src: Package Control.sublime-settings.j2
+    dest: "{{ sublime_package_control_package_path }}/Package Control.sublime-settings"

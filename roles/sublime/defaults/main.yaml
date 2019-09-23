@@ -1,0 +1,10 @@
+---
+# defaults file for sublime-text
+
+# Set the version for Sublime-Text
+sublime_version: 3
+
+sublime_package_control: true
+
+sublime_packages:
+  - "Terminal"

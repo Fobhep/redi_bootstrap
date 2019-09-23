@@ -1,0 +1,7 @@
+---
+# vars file for sublime-text (RedHat)
+
+sublime_repo_key: 'download.sublimetext.com/sublimehq-rpm-pub.gpg'
+sublime_repo_url: 'download.sublimetext.com/rpm/stable/x86_64/'
+sublime_repo_name: sublime-text
+sublime_repo_desc: "Sublime Text stable x86_64 repository"
